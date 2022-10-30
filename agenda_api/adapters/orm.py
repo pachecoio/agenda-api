@@ -62,7 +62,7 @@ appointments_table = Table(
     "appointments",
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
-    Column("client_id", Integer, ForeignKey("clients.id")),
+    Column("client_id", Integer, ForeignKey("clients.id"), nullable=False),
     Column("status", Enum(domain.AppointmentStatus), nullable=False),
     Column("updated_at", DateTime),
     Column("updated_by", Integer)
