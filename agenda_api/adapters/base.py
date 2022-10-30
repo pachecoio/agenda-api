@@ -1,5 +1,5 @@
 import abc
-from typing import Type
+from typing import Type, Dict
 
 from sqlalchemy.orm import Session, Query
 
@@ -26,4 +26,30 @@ class AbstractRepository(abc.ABC):
 
     def rollback(self):
         """Base method to rollback db changes"""
+        self.session.rollback()
+
+
+class AbstractUnitOfWork(abc.ABC):
+    session: Session
+    employees: AbstractRepository
+    clients: AbstractRepository
+    services: AbstractRepository
+    appointments: AbstractRepository
+
+    @abc.abstractmethod
+    def __enter__(self):
+        """Initialize the unit of work"""
+
+    @abc.abstractmethod
+    def __exit__(self, *args):
+        """Exit unit of work"""
+
+    @abc.abstractmethod
+    def commit(self):
+        """Commit changes to the database"""
+        self.session.commit()
+
+    @abc.abstractmethod
+    def rollback(self):
+        """Rollback changes to the database"""
         self.session.rollback()

@@ -10,6 +10,7 @@ from agenda_api.domain import errors
 class User:
     first_name: str
     last_name: str
+    id: int = field(init=False)
 
     @property
     def name(self) -> str:
@@ -30,6 +31,7 @@ class Client(User):
 class Service:
     name: str
     price: int
+    id: int = field(init=False)
     duration: timedelta = field(default_factory=lambda: timedelta(hours=1))
 
     def __init__(self, name: str, price: int, duration: timedelta = None):

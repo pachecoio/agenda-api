@@ -37,7 +37,9 @@ def test_cannot_create_service_invalid_duration():
 
 def test_appointment():
     haircut = domain.Service("haircut", 5000)
+    haircut.id = 1
     bear_trim = domain.Service("Bear trim", 2500, duration=timedelta(minutes=30))
+    bear_trim.id = 2
     services = set()
     services.add(haircut)
     services.add(bear_trim)
@@ -54,6 +56,7 @@ def test_appointment():
 @pytest.fixture
 def sample_appointment() -> domain.Appointment:
     haircut = domain.Service("haircut", 5000)
+    haircut.id = 1
     return domain.Appointment(
         client_id=1,
         services={haircut}
@@ -62,7 +65,9 @@ def sample_appointment() -> domain.Appointment:
 
 @pytest.fixture
 def employee():
-    return domain.Employee("Jon", "Snow")
+    employee = domain.Employee("Jon", "Snow")
+    employee.id = 1
+    return employee
 
 
 def test_start_appointment(sample_appointment, employee):
