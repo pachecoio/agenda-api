@@ -1,6 +1,10 @@
 from agenda_api import domain
-from agenda_api.adapters.repositories import EmployeeRepository, ClientRepository, ServiceRepository, \
-    AppointmentRepository
+from agenda_api.adapters.repositories import (
+    AppointmentRepository,
+    ClientRepository,
+    EmployeeRepository,
+    ServiceRepository,
+)
 
 
 def test_repo_create_employee(session, session_factory):
@@ -30,7 +34,7 @@ def test_repo_create_client(session, session_factory):
 def test_repo_create_service(session, session_factory):
     repo = ServiceRepository(session=session_factory())
     service = domain.Service(
-        name='haircut',
+        name="haircut",
         price=5000,
     )
     repo.save(service)
@@ -45,8 +49,7 @@ def test_repo_create_service(session, session_factory):
 def test_repo_create_appointment(session, session_factory):
     repo = AppointmentRepository(session=session_factory())
     appointment = domain.Appointment(
-        client_id=1,
-        services={domain.Service("haircut", 5000)}
+        client_id=1, services={domain.Service("haircut", 5000)}
     )
     repo.save(appointment)
     repo.commit()

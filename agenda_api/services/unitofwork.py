@@ -3,8 +3,12 @@ from typing import Callable
 from sqlalchemy.orm import Session
 
 from agenda_api.adapters.base import AbstractUnitOfWork
-from agenda_api.adapters.repositories import EmployeeRepository, ClientRepository, ServiceRepository, \
-    AppointmentRepository
+from agenda_api.adapters.repositories import (
+    AppointmentRepository,
+    ClientRepository,
+    EmployeeRepository,
+    ServiceRepository,
+)
 
 
 class UnitOfWork(AbstractUnitOfWork):

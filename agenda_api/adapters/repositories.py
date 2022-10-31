@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import Type, Set
+from typing import Set, Type
 
-from sqlalchemy.orm import Session, Query
+from sqlalchemy.orm import Query, Session
 
 from agenda_api import domain
 from agenda_api.adapters.base import AbstractRepository
@@ -27,9 +27,7 @@ class ServiceRepository(AbstractRepository):
     def filter(self, ids: Set[int] = None, **kwargs) -> Query:
         query = self.session.query(self.model)
         if ids:
-            query = query.filter(
-                self.model.id.in_(ids)
-            )
+            query = query.filter(self.model.id.in_(ids))
         query = query.filter_by(**kwargs)
         return query
 

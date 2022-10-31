@@ -1,7 +1,7 @@
 import abc
-from typing import Type, Dict
+from typing import Dict, Optional, Type
 
-from sqlalchemy.orm import Session, Query
+from sqlalchemy.orm import Query, Session
 
 
 class AbstractRepository(abc.ABC):
@@ -15,6 +15,10 @@ class AbstractRepository(abc.ABC):
     def filter(self, **kwargs) -> Query:
         """Base method to filter entities"""
         return self.session.query(self.model).filter_by(**kwargs)
+
+    def get(self, entity_id: int) -> Optional[any]:
+        """Base method to get an entity"""
+        return self.session.query(self.model).get(entity_id)
 
     def delete(self, model):
         """Base method to delete an entity"""

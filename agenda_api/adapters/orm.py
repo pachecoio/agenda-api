@@ -2,14 +2,18 @@ import os
 from datetime import datetime
 
 from sqlalchemy import (
-    create_engine,
-    MetaData,
+    Boolean,
     Column,
-    String,
+    DateTime,
+    Enum,
+    ForeignKey,
     Integer,
-    orm,
+    Interval,
+    MetaData,
+    String,
     Table,
-    Enum, Boolean, Interval, ForeignKey, DateTime,
+    create_engine,
+    orm,
 )
 from sqlalchemy.orm import relationship
 
@@ -29,9 +33,7 @@ def get_database_uri() -> str:
 
 DEFAULT_ENGINE = create_engine(get_database_uri())
 
-DEFAULT_SESSION_FACTORY = orm.sessionmaker(
-    bind=DEFAULT_ENGINE
-)
+DEFAULT_SESSION_FACTORY = orm.sessionmaker(bind=DEFAULT_ENGINE)
 
 employees_table = Table(
     "employees",
@@ -65,7 +67,7 @@ appointments_table = Table(
     Column("client_id", Integer, ForeignKey("clients.id"), nullable=False),
     Column("status", Enum(domain.AppointmentStatus), nullable=False),
     Column("updated_at", DateTime),
-    Column("updated_by", Integer)
+    Column("updated_by_id", Integer, ForeignKey("employees.id")),
 )
 
 appointment_services_table = Table(
@@ -78,7 +80,7 @@ appointment_services_table = Table(
 
 
 def start_mappers():
-    orm.mapper(domain.Employee, employees_table)
+    employees_mapper = orm.mapper(domain.Employee, employees_table)
     orm.mapper(domain.Client, clients_table)
     services_mapper = orm.mapper(domain.Service, services_table)
     orm.mapper(
@@ -88,7 +90,10 @@ def start_mappers():
             "services": relationship(
                 services_mapper,
                 secondary=appointment_services_table,
-                collection_class=set
-            )
-        }
+                collection_class=set,
+            ),
+            "updated_by": relationship(
+                employees_mapper,
+            ),
+        },
     )

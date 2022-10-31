@@ -43,10 +43,7 @@ def test_appointment():
     services = set()
     services.add(haircut)
     services.add(bear_trim)
-    appointment = domain.Appointment(
-        client_id=1,
-        services=services
-    )
+    appointment = domain.Appointment(client_id=1, services=services)
     assert len(appointment.services) == 2
     assert appointment.status == domain.AppointmentStatus.PENDING
     assert appointment.total_price == 7500
@@ -57,10 +54,7 @@ def test_appointment():
 def sample_appointment() -> domain.Appointment:
     haircut = domain.Service("haircut", 5000)
     haircut.id = 1
-    return domain.Appointment(
-        client_id=1,
-        services={haircut}
-    )
+    return domain.Appointment(client_id=1, services={haircut})
 
 
 @pytest.fixture
@@ -94,25 +88,37 @@ def test_cannot_start_appointment_completed(sample_appointment):
     sample_appointment.status = domain.AppointmentStatus.COMPLETED
     with pytest.raises(errors.AppointmentError) as e:
         sample_appointment.start()
-    assert e.value.message == f"Cannot start an appointment with status {sample_appointment.status.value}"
+    assert (
+        e.value.message
+        == f"Cannot start an appointment with status {sample_appointment.status.value}"
+    )
 
 
 def test_cannot_start_appointment_canceled(sample_appointment, employee):
     sample_appointment.complete(employee)
     with pytest.raises(errors.AppointmentError) as e:
         sample_appointment.start()
-    assert e.value.message == f"Cannot start an appointment with status {sample_appointment.status.value}"
+    assert (
+        e.value.message
+        == f"Cannot start an appointment with status {sample_appointment.status.value}"
+    )
 
 
 def test_cannot_complete_appointment_canceled(sample_appointment, employee):
     sample_appointment.cancel(employee)
     with pytest.raises(errors.AppointmentError) as e:
         sample_appointment.complete(employee)
-    assert e.value.message == f"Cannot complete an appointment with status {sample_appointment.status.value}"
+    assert (
+        e.value.message
+        == f"Cannot complete an appointment with status {sample_appointment.status.value}"
+    )
 
 
 def test_cannot_cancel_appointment_completed(sample_appointment, employee):
     sample_appointment.complete(employee)
     with pytest.raises(errors.AppointmentError) as e:
         sample_appointment.cancel(employee)
-    assert e.value.message == f"Cannot cancel an appointment with status {sample_appointment.status.value}"
+    assert (
+        e.value.message
+        == f"Cannot cancel an appointment with status {sample_appointment.status.value}"
+    )

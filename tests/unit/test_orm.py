@@ -17,9 +17,7 @@ def test_can_create_client(session):
     session.execute(
         "INSERT INTO clients (first_name, last_name) VALUES ('Jon', 'Snow')"
     )
-    clients = session.execute(
-        "SELECT first_name, last_name FROM clients"
-    ).fetchall()
+    clients = session.execute("SELECT first_name, last_name FROM clients").fetchall()
     assert len(clients) == 1
 
 
@@ -40,10 +38,7 @@ def test_can_create_service(session):
 
 def test_can_create_appointment(session):
     haircut = domain.Service("haircut", 5000)
-    appointment = domain.Appointment(
-        client_id=1,
-        services={haircut}
-    )
+    appointment = domain.Appointment(client_id=1, services={haircut})
     session.add(appointment)
     session.commit()
 
@@ -54,4 +49,3 @@ def test_can_create_appointment(session):
     assert appointment.client_id == 1
     assert not appointment.updated_at
     assert not appointment.updated_by
-

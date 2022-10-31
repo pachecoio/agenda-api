@@ -1,7 +1,7 @@
 import enum
 from dataclasses import dataclass, field
-from datetime import timedelta, datetime
-from typing import Set, Optional
+from datetime import datetime, timedelta
+from typing import Optional, Set
 
 from agenda_api.domain import errors
 
@@ -60,6 +60,7 @@ class Appointment:
     status: AppointmentStatus = AppointmentStatus.PENDING
     updated_at: Optional[datetime] = None
     updated_by: Optional[Employee] = None
+    id: int = field(init=False)
 
     @property
     def total_price(self) -> int:

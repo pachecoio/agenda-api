@@ -31,3 +31,15 @@ class CreateService(Command):
 class CreateAppointment(Command):
     client_id: int
     service_ids: Set[int]
+
+
+@dataclass(frozen=True)
+class CompleteAppointment(Command):
+    appointment_id: int
+    employee_id: int
+
+
+@dataclass(frozen=True)
+class CancelAppointment(Command):
+    appointment_id: int
+    employee_id: int

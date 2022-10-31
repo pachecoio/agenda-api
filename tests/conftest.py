@@ -7,9 +7,7 @@ from agenda_api.adapters.repositories import EmployeeRepository
 
 @pytest.fixture
 def in_memory_db():
-    engine = create_engine(
-        "sqlite://", connect_args={"check_same_thread": False}
-    )
+    engine = create_engine("sqlite://", connect_args={"check_same_thread": False})
     metadata.create_all(engine)
     return engine
 
