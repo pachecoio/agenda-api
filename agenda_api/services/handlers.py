@@ -9,16 +9,19 @@ from agenda_api.services.errors import EntityNotFound
 def create_employee(uow: AbstractUnitOfWork, cmd: commands.Command):
     employee = domain.Employee(**asdict(cmd))
     uow.employees.save(employee)
+    return employee
 
 
 def create_client(uow: AbstractUnitOfWork, cmd: commands.Command):
     client = domain.Client(**asdict(cmd))
     uow.clients.save(client)
+    return client
 
 
 def create_service(uow: AbstractUnitOfWork, cmd: commands.Command):
     service = domain.Service(**asdict(cmd))
     uow.services.save(service)
+    return service
 
 
 def create_appointment(uow: AbstractUnitOfWork, cmd: commands.CreateAppointment):

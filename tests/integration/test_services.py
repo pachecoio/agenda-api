@@ -49,12 +49,25 @@ def services(session_factory) -> Set[domain.Service]:
     return {service}
 
 
+@pytest.fixture
+def client(session_factory) -> domain.Client:
+    client = domain.Client(
+        "Jon",
+        "Snow",
+    )
+    repo = ClientRepository(session=session_factory())
+    repo.save(client)
+    repo.commit()
+    return client
+
+
 def test_create_employee(session, session_factory):
     uow = UnitOfWork(session_factory=session_factory)
     with uow:
         cmd = commands.CreateEmployee("Jon", "Snow")
-        create_employee(uow, cmd)
+        employee = create_employee(uow, cmd)
         uow.commit()
+        assert employee.id
 
     repo = EmployeeRepository(session=session_factory())
     employees = repo.filter()
@@ -65,8 +78,9 @@ def test_create_client(session, session_factory):
     uow = UnitOfWork(session_factory=session_factory)
     with uow:
         cmd = commands.CreateClient("Jon", "Snow")
-        create_client(uow, cmd)
+        client = create_client(uow, cmd)
         uow.commit()
+        assert client.id
 
     repo = ClientRepository(session=session_factory())
     clients = repo.filter()
@@ -83,18 +97,6 @@ def test_create_service(session, session_factory):
     repo = ServiceRepository(session=session_factory())
     services = repo.filter()
     assert services.count() == 1
-
-
-@pytest.fixture
-def client(session_factory) -> domain.Client:
-    client = domain.Client(
-        "Jon",
-        "Snow",
-    )
-    repo = ClientRepository(session=session_factory())
-    repo.save(client)
-    repo.commit()
-    return client
 
 
 def test_create_appointment(session, session_factory, client, services):

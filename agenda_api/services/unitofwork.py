@@ -3,6 +3,7 @@ from typing import Callable
 from sqlalchemy.orm import Session
 
 from agenda_api.adapters.base import AbstractUnitOfWork
+from agenda_api.adapters.orm import DEFAULT_SESSION_FACTORY
 from agenda_api.adapters.repositories import (
     AppointmentRepository,
     ClientRepository,
@@ -42,3 +43,7 @@ class UnitOfWork(AbstractUnitOfWork):
 
     def rollback(self):
         self.session.rollback()
+
+
+def get_default_uow() -> UnitOfWork:
+    return UnitOfWork(DEFAULT_SESSION_FACTORY)
